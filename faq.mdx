@@ -6,45 +6,56 @@ description: "Common questions and troubleshooting"
 ## Common questions
 
 <AccordionGroup>
-  <Accordion title="How does Sonarly integrate with my workflow?">
-    Sonarly connects to your GitHub or GitLab repositories and automatically reviews pull requests. You'll see feedback directly in your PR comments.
+  <Accordion title="What is Sonarly?">
+    Sonarly is an AI-first debugging platform that captures user sessions, detects bugs automatically, and generates LLM-ready context to fix them with your coding agent (Cursor, Claude, Windsurf, etc.).
   </Accordion>
 
-  <Accordion title="What languages does Sonarly support?">
-    Sonarly supports all major programming languages including JavaScript, TypeScript, Python, Java, Go, Ruby, and more.
+  <Accordion title="How does the one-click configuration work?">
+    Copy the config prompt from your Sonarly dashboard and paste it into your coding agent (Cursor, Claude, Windsurf). Your agent will automatically install the tracker, configure sourcemaps, and set up backend tracing.
   </Accordion>
 
-  <Accordion title="How much does Sonarly cost?">
-    We offer flexible pricing based on your team size. Visit our [pricing page](https://sonarly.com/pricing) for details or contact us for enterprise plans.
+  <Accordion title="What frameworks does Sonarly support?">
+    Frontend: React, Vue, Svelte, Angular, and vanilla JS. Backend: Express, NestJS, Fastify, Django, FastAPI, Flask. See the [supported stacks](/supported-stacks) page for details.
   </Accordion>
 
-  <Accordion title="Is my code secure?">
-    Yes. We take security seriously. Your code is encrypted in transit and at rest, and we never store your source code permanently. Read our [security policy](https://sonarly.com/security) for more details.
+  <Accordion title="How do AI-powered alerts work?">
+    Sonarly detects errors from frontend and backend, clusters similar issues using AI, and sends email alerts only for critical issues with full context (file, line, function, occurrence count).
   </Accordion>
 
-  <Accordion title="Can I customize the review rules?">
-    Absolutely! You can configure review rules, severity levels, and which checks to run through your Sonarly dashboard.
+  <Accordion title="What is LLM-ready context?">
+    When a bug is detected, you can copy the full context (error, location, network requests, console logs, backend traces) and paste it directly into your coding agent to fix the bug.
+  </Accordion>
+
+  <Accordion title="Is my data secure?">
+    Yes. Your data is encrypted in transit and at rest. You control what data is captured (sensitive inputs are masked by default). We never share your data with third parties.
   </Accordion>
 </AccordionGroup>
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Sonarly isn't commenting on my PRs">
+  <Accordion title="Tracker not connecting">
     Check that:
-    - The Sonarly app is installed on your repository
-    - Your repository has the correct permissions enabled
-    - Your subscription is active
+    - Your `projectKey` is correct
+    - `ingestPoint` is set to `https://sonarly.dev/ingest`
+    - Enable debug mode: `__debug__: 5`
     
-    If issues persist, contact support.
+    If issues persist, contact us at founders@sonarly.dev
   </Accordion>
 
-  <Accordion title="How do I disable Sonarly for a specific PR?">
-    Add `[skip sonarly]` to your PR title or description to skip automated reviews for that PR.
+  <Accordion title="Sourcemaps not working">
+    Verify that:
+    - `.map` files are generated in your build
+    - Upload command succeeded (no 404 errors)
+    - Sourcemap paths match production URLs
   </Accordion>
 
-  <Accordion title="Reviews are taking too long">
-    Large PRs may take longer to review. For faster reviews, consider breaking up large changes into smaller PRs. If you're experiencing unusual delays, contact support.
+  <Accordion title="Backend traces not appearing">
+    Check that:
+    - DSN format is correct: `https://KEY@sonarly.dev/ID`
+    - `tracesSampleRate` is set to `1.0`
+    - Backend was restarted after configuration
+    - CORS allows `x-sonarly-session-id` header
   </Accordion>
 </AccordionGroup>
 
@@ -53,8 +64,8 @@ description: "Common questions and troubleshooting"
 <Card
   title="Contact support"
   icon="headset"
-  href="mailto:support@sonarly.com"
+  href="mailto:founders@sonarly.dev"
   horizontal
 >
-  Reach out to our team at support@sonarly.com
+  Reach out to our team at founders@sonarly.dev
 </Card>
