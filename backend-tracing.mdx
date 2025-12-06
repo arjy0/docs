@@ -28,6 +28,7 @@ Sentry.init({
 const app = express();
 
 // Link backend traces to frontend sessions
+// This is automatic if you follow the 1min onboarding at sonarly.dev
 app.use((req, res, next) => {
   const sessionId = req.headers['x-sonarly-session-id'];
   if (sessionId) {
