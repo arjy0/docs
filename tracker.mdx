@@ -1,0 +1,139 @@
+---
+title: "Tracker"
+description: "Install and configure Sonarly tracking"
+---
+
+<Tabs>
+  <Tab title="Frontend">
+    ## Install the tracker
+
+    Install the Sonarly tracker in your frontend application:
+
+    ```bash
+    npm install @sonarly/tracker
+    ```
+
+    ## Initialize
+
+    Add the tracker to your app entry point:
+
+    ```javascript
+    import Tracker from '@sonarly/tracker';
+
+    Tracker.init({
+      projectKey: 'YOUR_PROJECT_KEY',
+      ingestPoint: 'https://sonarly.dev/ingest',
+    });
+    ```
+
+    ## Configuration options
+
+    | Option | Type | Description |
+    |--------|------|-------------|
+    | `projectKey` | string | Your project key from the dashboard |
+    | `ingestPoint` | string | Ingestion endpoint (use `https://sonarly.dev/ingest`) |
+    | `__debug__` | number | Debug level (0-5, use 5 for verbose logging) |
+
+    ## Verify installation
+
+    Check your browser console for Sonarly initialization messages. Sessions should appear in your dashboard within seconds.
+  </Tab>
+
+  <Tab title="Source maps">
+    ## Generate source maps
+
+    Ensure your build tool generates source maps:
+
+    ### Vite
+    ```javascript
+    // vite.config.js
+    export default {
+      build: {
+        sourcemap: true
+      }
+    }
+    ```
+
+    ### Webpack
+    ```javascript
+    // webpack.config.js
+    module.exports = {
+      devtool: 'source-map'
+    }
+    ```
+
+    ### Next.js
+    ```javascript
+    // next.config.js
+    module.exports = {
+      productionBrowserSourceMaps: true
+    }
+    ```
+
+    ## Upload source maps
+
+    After building, upload your source maps to Sonarly:
+
+    ```bash
+    npx @sonarly/cli upload-sourcemaps \
+      --project YOUR_PROJECT_KEY \
+      --dir ./dist
+    ```
+
+    ## Verify
+
+    Check that `.map` files are uploaded successfully. Errors in your dashboard should now show original source code locations.
+  </Tab>
+
+  <Tab title="Backend tracing">
+    ## Install SDK
+
+    Install the Sonarly SDK for your backend:
+
+    ```bash
+    npm install @sonarly/node
+    ```
+
+    ## Initialize
+
+    Add Sonarly to your backend entry point:
+
+    ### Express
+    ```javascript
+    const Sonarly = require('@sonarly/node');
+
+    Sonarly.init({
+      dsn: 'https://YOUR_KEY@sonarly.dev/YOUR_PROJECT_ID',
+      tracesSampleRate: 1.0,
+    });
+
+    app.use(Sonarly.Handlers.requestHandler());
+    app.use(Sonarly.Handlers.errorHandler());
+    ```
+
+    ### NestJS
+    ```typescript
+    import * as Sonarly from '@sonarly/node';
+
+    Sonarly.init({
+      dsn: 'https://YOUR_KEY@sonarly.dev/YOUR_PROJECT_ID',
+      tracesSampleRate: 1.0,
+    });
+    ```
+
+    ## Link frontend sessions
+
+    Enable CORS for the session header:
+
+    ```javascript
+    app.use(cors({
+      exposedHeaders: ['x-sonarly-session-id'],
+      allowedHeaders: ['x-sonarly-session-id']
+    }));
+    ```
+
+    ## Verify
+
+    Backend traces should appear linked to frontend sessions in your dashboard.
+  </Tab>
+</Tabs>
