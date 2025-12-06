@@ -11,8 +11,24 @@
   "navigation": {
     "pages": [
       "quickstart",
-      "faq",
-      "supported-stacks"
+      {
+        "group": "Setup",
+        "pages": [
+          "installation",
+          "sourcemaps",
+          "backend-tracing"
+        ]
+      },
+      {
+        "group": "Features",
+        "pages": [
+          "ai-alerts",
+          "issue-replay",
+          "llm-context"
+        ]
+      },
+      "supported-stacks",
+      "faq"
     ]
   },
   "logo": {
