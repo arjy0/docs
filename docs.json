@@ -45,7 +45,7 @@
     "primary": {
       "type": "button",
       "label": "Sign up",
-      "href": "https://sonarly.com/signup"
+      "href": "https://sonarly.dev"
     }
   },
   "contextual": {
