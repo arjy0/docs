@@ -1,0 +1,379 @@
+---
+title: "Sonarly Documentation"
+description: "AI-first debugging platform that detects bugs, clusters them intelligently, and generates LLM-ready context"
+---
+
+> **Sonarly is not just a session replay tool.**  
+> It's an AI-first debugging platform that detects bugs, clusters them intelligently, and generates LLM-ready context to fix them with your coding agent.
+
+---
+
+## 🎯 What is Sonarly?
+
+Sonarly captures user sessions, detects bugs automatically, and gives you everything you need to fix them fast — including context ready to paste into Cursor, Claude, or any AI coding assistant.
+
+### The 4 Pillars of Sonarly
+
+| Step | Feature | What it does |
+|------|---------|--------------|
+| 1️⃣ | **One-click configuration** | Copy our super prompt → paste it in Cursor/Claude/Windsurf → your agent configures everything (tracker, sourcemaps, backend) in one shot |
+| 2️⃣ | **AI-powered alerts** | We detect issues in frontend AND backend, cluster them intelligently, and alert you only when it matters |
+| 3️⃣ | **Issue Replay** | Replay the exact session where the bug occurred — see console logs, network requests, and backend traces |
+| 4️⃣ | **LLM-ready context** | Copy the full bug context (error, location, network, logs) and paste it to your coding agent to fix it |
+
+---
+
+## 🚀 Quick Start
+
+### Step 1: Get Your Config Prompt
+
+1. Sign up at [sonarly.dev](https://sonarly.dev)
+2. Create a project
+3. Click **"Copy Config Prompt"** button
+
+### Step 2: Paste in Your Coding Agent
+
+Open Cursor, Claude, Windsurf, or any AI coding assistant and paste the prompt. Your agent will:
+
+- ✅ Install the Sonarly tracker
+- ✅ Configure sourcemaps upload
+- ✅ Set up backend tracing (if applicable)
+
+### Step 3: Deploy & Start Catching Bugs
+
+Deploy your app. Sonarly will:
+
+- Record user sessions
+- Detect errors automatically
+- Send you AI-powered alerts
+- Generate fix context for your coding agent
+
+---
+
+## 📦 Installation
+
+### Frontend Tracker
+
+#### Option A: NPM Package (Recommended)
+
+```bash
+npm install @sonarly/tracker
+```
+
+```typescript
+import Tracker from '@sonarly/tracker';
+
+const tracker = new Tracker({
+  projectKey: "YOUR_PROJECT_KEY",
+  ingestPoint: "https://sonarly.dev/ingest"
+});
+
+tracker.start();
+```
+
+#### Option B: HTML Script Tag
+
+```html
+<script>
+  (function(A, opts){
+    window.Sonarly = { opts: opts, queue: [] };
+    var s = document.createElement('script');
+    s.src = A;
+    s.async = true;
+    document.head.appendChild(s);
+  })("https://sonarly.dev/static/tracker.js", {
+    projectKey: "YOUR_PROJECT_KEY",
+    ingestPoint: "https://sonarly.dev/ingest"
+  });
+</script>
+```
+
+---
+
+## 🗺️ Sourcemaps
+
+Sourcemaps let Sonarly show you the **original source code** in error stack traces instead of minified code.
+
+### Enable Sourcemaps in Your Build
+
+| Framework | Config | Sourcemaps Directory |
+|-----------|--------|---------------------|
+| Create React App | `GENERATE_SOURCEMAP=true` in .env | `./build/static/js/` |
+| Vite | `build: { sourcemap: true }` in vite.config.ts | `./dist/assets/` |
+| Next.js | `productionBrowserSourceMaps: true` in next.config.js | `./.next/static/chunks/` |
+| Nuxt 3 | `sourcemap: { client: true }` in nuxt.config.ts | `./.output/public/_nuxt/` |
+| Vue CLI | `productionSourceMap: true` in vue.config.js | `./dist/js/` |
+| Remix | `build: { sourcemap: true }` in vite.config.ts | `./public/build/` |
+| SvelteKit | `build: { sourcemap: true }` in vite.config.ts | `./build/_app/immutable/` |
+
+### Upload Sourcemaps
+
+The CLI is included in `@sonarly/tracker`:
+
+```bash
+npx sonarly-upload-sourcemaps \
+  --api-key YOUR_PROJECT_KEY \
+  --project YOUR_PROJECT_ID \
+  --server https://sonarly.dev \
+  ./dist/assets  # Adjust path based on your framework
+```
+
+---
+
+## 🔗 Backend Tracing
+
+Sonarly captures backend traces using the **standard Sentry SDK**. No custom SDK needed!
+
+### DSN Format
+
+```
+https://PROJECT_KEY@sonarly.dev/PROJECT_ID
+```
+
+### Node.js (Express)
+
+```bash
+npm install @sentry/node
+```
+
+```javascript
+const Sentry = require("@sentry/node");
+
+Sentry.init({
+  dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+  tracesSampleRate: 1.0,
+});
+
+const app = express();
+
+// Link backend traces to frontend sessions
+app.use((req, res, next) => {
+  const sessionId = req.headers['x-sonarly-session-id'];
+  if (sessionId) {
+    Sentry.setTag('sonarly.session_id', sessionId);
+  }
+  next();
+});
+
+// Your routes here...
+
+Sentry.setupExpressErrorHandler(app);
+```
+
+### Node.js (NestJS)
+
+```bash
+npm install @sentry/nestjs
+```
+
+```typescript
+// instrument.ts
+import * as Sentry from "@sentry/nestjs";
+
+Sentry.init({
+  dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+  tracesSampleRate: 1.0,
+});
+
+// main.ts - Import instrument FIRST
+import "./instrument";
+
+// app.module.ts
+import { SentryModule } from "@sentry/nestjs/setup";
+
+@Module({
+  imports: [SentryModule.forRoot()],
+})
+export class AppModule {}
+```
+
+### Python (Django)
+
+```bash
+pip install sentry-sdk
+```
+
+```python
+# settings.py or wsgi.py/asgi.py
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+)
+```
+
+### Python (FastAPI)
+
+```bash
+pip install sentry-sdk[fastapi]
+```
+
+```python
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    traces_sample_rate=1.0,
+)
+
+@app.middleware("http")
+async def link_session(request, call_next):
+    session_id = request.headers.get("x-sonarly-session-id")
+    if session_id:
+        sentry_sdk.set_tag("sonarly.session_id", session_id)
+    return await call_next(request)
+```
+
+### Python (Flask)
+
+```bash
+pip install sentry-sdk[flask]
+```
+
+```python
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    integrations=[FlaskIntegration()],
+    traces_sample_rate=1.0,
+)
+```
+
+---
+
+## 🔔 AI-Powered Alerts
+
+Sonarly doesn't just collect errors — it **understands** them.
+
+### How it works
+
+1. **Detection**: Captures errors from frontend (JS exceptions, console.error) and backend (Sentry traces)
+2. **Clustering**: Groups similar errors together using AI
+3. **Prioritization**: Identifies critical issues based on frequency, user impact, and severity
+4. **Alerting**: Sends email alerts with full context:
+   - Error message
+   - File and line number
+   - Function name
+   - Occurrence count
+   - User sessions affected
+
+### Example Alert
+
+```
+🚨 New critical issue detected in yourwebsite.com
+
+A user is blocked after the login                    [Critical]
+
+This AuthenticationError occurred 3 times in the last 2 minutes 
+in auth.service.ts at line 145 (validateUser function).
+```
+
+---
+
+## 🎬 Issue Replay
+
+When a bug is detected, you can replay the exact session where it happened.
+
+### What you see
+
+- **DOM Replay**: See exactly what the user saw
+- **User Actions**: Clicks, scrolls, form inputs
+- **Console Logs**: All console.log, warn, error
+- **Network Requests**: All fetch/XHR with request/response bodies
+- **Backend Traces**: Linked server-side logs and errors
+
+### Timeline
+
+Errors are marked on the timeline so you can jump directly to the moment the bug occurred.
+
+---
+
+## 📋 LLM-Ready Context
+
+The killer feature: **Copy the full bug context and paste it to your coding agent.**
+
+### What's included
+
+```
+Fix the AuthenticationError in auth.service.ts line 145.
+
+Context:
+- Error: User blocked after login
+- Location: validateUser() function
+- Network: GET /api/user/status returned 403
+- Console: [error] "Invalid session token"
+- User action: Clicked "Login" button
+- Previous page: /signup
+...
+```
+
+### How to use
+
+1. Open the bug in Sonarly
+2. Click "Copy" button
+3. Paste in Cursor/Claude/ChatGPT
+4. Let your AI fix the bug with full context
+
+---
+
+## 🛠️ Supported Frameworks
+
+### Frontend
+
+| Framework | Status | Notes |
+|-----------|--------|-------|
+| React | ✅ | CRA, Vite, Next.js, Remix |
+| Vue | ✅ | Vue CLI, Nuxt, Vite |
+| Svelte | ✅ | SvelteKit |
+| Angular | ✅ | |
+| Vanilla JS | ✅ | HTML script tag |
+
+### Backend
+
+| Framework | Status | SDK |
+|-----------|--------|-----|
+| Express.js | ✅ | @sentry/node |
+| NestJS | ✅ | @sentry/nestjs |
+| Fastify | ✅ | @sentry/node |
+| Django | ✅ | sentry-sdk |
+| FastAPI | ✅ | sentry-sdk[fastapi] |
+| Flask | ✅ | sentry-sdk[flask] |
+
+---
+
+## 🔧 Troubleshooting
+
+### Tracker not connecting
+
+1. Check `projectKey` is correct
+2. Check `ingestPoint` is `https://sonarly.dev/ingest`
+3. Enable debug mode: `__debug__: 5`
+
+### Sourcemaps not working
+
+1. Verify `.map` files are generated in build
+2. Check upload command succeeded (no 404)
+3. Ensure sourcemap paths match production URLs
+
+### Backend traces not appearing
+
+1. Verify DSN format: `https://KEY@sonarly.dev/ID`
+2. Set `tracesSampleRate: 1.0` (100%)
+3. Restart backend after changes
+4. Check CORS allows `x-sonarly-session-id` header
+
+---
+
+## 📧 Support
+
+- **Email**: founders@sonarly.dev
+- **GitHub**: [github.com/alex78420/sonarly-tracker](https://github.com/alex78420/sonarly-tracker)
+
+---
+
+© 2025 Sonarly. All rights reserved.
