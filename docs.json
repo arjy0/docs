@@ -9,9 +9,12 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
+    "pages": [
+      "index"
+    ],
     "groups": [
       {
-        "group": "Documentation",
+        "group": "Resources",
         "pages": [
           "quickstart",
           "faq",
