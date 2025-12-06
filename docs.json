@@ -23,17 +23,11 @@
     ],
     "pages": [
       {
-        "group": "Setup",
+        "group": "Overview",
         "pages": [
-          "quickstart"
-        ]
-      },
-      {
-        "group": "Tracker",
-        "pages": [
-          "installation",
-          "sourcemaps",
-          "backend-tracing"
+          "quickstart",
+          "tracker",
+          "troubleshooting"
         ]
       },
       {
@@ -44,8 +38,7 @@
           "llm-context"
         ]
       },
-      "supported-stacks",
-      "faq"
+      "supported-stacks"
     ]
   },
   "logo": {
