@@ -1,0 +1,42 @@
+---
+title: "AI-powered alerts"
+description: "Get intelligent alerts when critical issues are detected"
+---
+
+Sonarly doesn't just collect errors — it **understands** them.
+
+## How it works
+
+1. **Detection**: Captures errors from frontend (JS exceptions, console.error) and backend (Sentry traces)
+2. **Clustering**: Groups similar errors together using AI
+3. **Prioritization**: Identifies critical issues based on frequency, user impact, and severity
+4. **Alerting**: Sends email alerts with full context:
+   - Error message
+   - File and line number
+   - Function name
+   - Occurrence count
+   - User sessions affected
+
+## Example alert
+
+```
+🚨 New critical issue detected in yourwebsite.com
+
+A user is blocked after the login                    [Critical]
+
+This AuthenticationError occurred 3 times in the last 2 minutes 
+in auth.service.ts at line 145 (validateUser function).
+```
+
+## Alert configuration
+
+You can configure alert thresholds and notification preferences in your Sonarly dashboard.
+
+<Card
+  title="Configure alerts"
+  icon="bell"
+  href="https://sonarly.dev"
+  horizontal
+>
+  Manage your alert settings
+</Card>

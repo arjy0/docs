@@ -1,0 +1,144 @@
+---
+title: "Backend tracing"
+description: "Capture backend traces using the standard Sentry SDK"
+---
+
+Sonarly captures backend traces using the **standard Sentry SDK**. No custom SDK needed!
+
+## DSN format
+
+```
+https://PROJECT_KEY@sonarly.dev/PROJECT_ID
+```
+
+## Node.js (Express)
+
+```bash
+npm install @sentry/node
+```
+
+```javascript
+const Sentry = require("@sentry/node");
+
+Sentry.init({
+  dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+  tracesSampleRate: 1.0,
+});
+
+const app = express();
+
+// Link backend traces to frontend sessions
+app.use((req, res, next) => {
+  const sessionId = req.headers['x-sonarly-session-id'];
+  if (sessionId) {
+    Sentry.setTag('sonarly.session_id', sessionId);
+  }
+  next();
+});
+
+// Your routes here...
+
+Sentry.setupExpressErrorHandler(app);
+```
+
+## Node.js (NestJS)
+
+```bash
+npm install @sentry/nestjs
+```
+
+```typescript
+// instrument.ts
+import * as Sentry from "@sentry/nestjs";
+
+Sentry.init({
+  dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+  tracesSampleRate: 1.0,
+});
+
+// main.ts - Import instrument FIRST
+import "./instrument";
+
+// app.module.ts
+import { SentryModule } from "@sentry/nestjs/setup";
+
+@Module({
+  imports: [SentryModule.forRoot()],
+})
+export class AppModule {}
+```
+
+## Python (Django)
+
+```bash
+pip install sentry-sdk
+```
+
+```python
+# settings.py or wsgi.py/asgi.py
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+)
+```
+
+## Python (FastAPI)
+
+```bash
+pip install sentry-sdk[fastapi]
+```
+
+```python
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    traces_sample_rate=1.0,
+)
+
+@app.middleware("http")
+async def link_session(request, call_next):
+    session_id = request.headers.get("x-sonarly-session-id")
+    if session_id:
+        sentry_sdk.set_tag("sonarly.session_id", session_id)
+    return await call_next(request)
+```
+
+## Python (Flask)
+
+```bash
+pip install sentry-sdk[flask]
+```
+
+```python
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+    dsn="https://YOUR_PROJECT_KEY@sonarly.dev/PROJECT_ID",
+    integrations=[FlaskIntegration()],
+    traces_sample_rate=1.0,
+)
+```
+
+## Troubleshooting
+
+### Backend traces not appearing
+
+1. Verify DSN format: `https://KEY@sonarly.dev/ID`
+2. Set `tracesSampleRate: 1.0` (100%)
+3. Restart backend after changes
+4. Check CORS allows `x-sonarly-session-id` header
+
+<Card
+  title="Need help?"
+  icon="headset"
+  href="mailto:founders@sonarly.dev"
+  horizontal
+>
+  Contact us at founders@sonarly.dev
+</Card>

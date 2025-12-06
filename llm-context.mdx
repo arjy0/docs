@@ -1,0 +1,113 @@
+---
+title: "LLM-ready context"
+description: "Fix bugs faster with AI coding agents"
+---
+
+The killer feature: **Copy the full bug context and paste it to your coding agent.**
+
+## What's included
+
+When you copy bug context from Sonarly, you get everything your AI needs to fix the issue:
+
+```
+Fix the AuthenticationError in auth.service.ts line 145.
+
+Context:
+- Error: User blocked after login
+- Location: validateUser() function
+- Network: GET /api/user/status returned 403
+- Console: [error] "Invalid session token"
+- User action: Clicked "Login" button
+- Previous page: /signup
+- Stack trace: [full stack with source maps]
+- Related code: [relevant code snippets]
+```
+
+## How to use
+
+1. Open the bug in Sonarly
+2. Click **"Copy context"** button
+3. Paste in Cursor/Claude/ChatGPT/Windsurf
+4. Let your AI fix the bug with full context
+
+<Frame>
+  <img src="/images/copy-context.png" alt="Copy context button in Sonarly" />
+</Frame>
+
+## Why this matters
+
+Traditional debugging requires you to:
+1. Read the error message
+2. Find the file and line number
+3. Check console logs
+4. Inspect network requests
+5. Understand user actions
+6. Manually explain all this to your AI
+
+With Sonarly, all of this is **automatically packaged** and ready to paste.
+
+## Example workflow
+
+<Steps>
+  <Step title="Get alerted">
+    Receive email: "New critical issue in auth.service.ts"
+  </Step>
+  <Step title="Copy context">
+    Click the alert link, then click "Copy context"
+  </Step>
+  <Step title="Paste in Cursor">
+    Open Cursor, paste the context in chat
+  </Step>
+  <Step title="AI fixes it">
+    Cursor analyzes the context and proposes a fix
+  </Step>
+  <Step title="Deploy">
+    Review, commit, and deploy the fix
+  </Step>
+</Steps>
+
+## Supported coding agents
+
+Sonarly's context format works with all major AI coding assistants:
+
+- **Cursor**: Paste in chat or composer
+- **Claude**: Paste in conversation
+- **ChatGPT**: Paste in chat
+- **Windsurf**: Paste in chat
+- **GitHub Copilot**: Paste in chat
+- **Codeium**: Paste in chat
+
+## Context customization
+
+You can customize what's included in the copied context:
+
+- **Stack traces**: Include full or abbreviated
+- **Code snippets**: Number of lines before/after error
+- **Network requests**: Include request/response bodies
+- **Console logs**: Include all or only errors
+- **User actions**: Include full session or last N actions
+
+Configure in your project settings.
+
+## Privacy note
+
+Sensitive data (passwords, tokens, API keys) is automatically redacted from the copied context. You can configure additional redaction rules in your project settings.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="One-click configuration"
+    icon="wand-magic-sparkles"
+    href="/quickstart"
+  >
+    Set up Sonarly with your coding agent
+  </Card>
+  <Card
+    title="AI-powered alerts"
+    icon="bell"
+    href="/ai-alerts"
+  >
+    Configure intelligent alerts
+  </Card>
+</CardGroup>

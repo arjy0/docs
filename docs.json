@@ -11,8 +11,24 @@
   "navigation": {
     "pages": [
       "quickstart",
-      "faq",
-      "supported-stacks"
+      {
+        "group": "Setup",
+        "pages": [
+          "installation",
+          "sourcemaps",
+          "backend-tracing"
+        ]
+      },
+      {
+        "group": "Features",
+        "pages": [
+          "ai-alerts",
+          "issue-replay",
+          "llm-context"
+        ]
+      },
+      "supported-stacks",
+      "faq"
     ]
   },
   "logo": {
@@ -23,13 +39,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@sonarly.com"
+        "href": "mailto:founders@sonarly.dev"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Sign up",
-      "href": "https://sonarly.com/signup"
+      "href": "https://sonarly.dev"
     }
   },
   "contextual": {
@@ -46,8 +62,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/sonarly",
-      "github": "https://github.com/sonarly"
+      "github": "https://github.com/alex78420/sonarly-tracker"
     }
   }
 }
