@@ -1,0 +1,48 @@
+---
+title: "Source maps"
+description: "Configure and upload source maps for error tracking"
+---
+
+## Generate source maps
+
+Ensure your build tool generates source maps:
+
+### Vite
+```javascript
+// vite.config.js
+export default {
+  build: {
+    sourcemap: true
+  }
+}
+```
+
+### Webpack
+```javascript
+// webpack.config.js
+module.exports = {
+  devtool: 'source-map'
+}
+```
+
+### Next.js
+```javascript
+// next.config.js
+module.exports = {
+  productionBrowserSourceMaps: true
+}
+```
+
+## Upload source maps
+
+After building, upload your source maps to Sonarly:
+
+```bash
+npx @sonarly/cli upload-sourcemaps \
+  --project YOUR_PROJECT_KEY \
+  --dir ./dist
+```
+
+## Verify
+
+Check that `.map` files are uploaded successfully. Errors in your dashboard should now show original source code locations.
