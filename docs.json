@@ -9,11 +9,15 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "pages": [
-      "index",
-      "quickstart",
-      "faq",
-      "supported-stacks"
+    "groups": [
+      {
+        "group": "Documentation",
+        "pages": [
+          "quickstart",
+          "faq",
+          "supported-stacks"
+        ]
+      }
     ]
   },
   "logo": {
