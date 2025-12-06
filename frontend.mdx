@@ -1,0 +1,37 @@
+---
+title: "Frontend"
+description: "Install and configure Sonarly tracker in your frontend"
+---
+
+## Install the tracker
+
+Install the Sonarly tracker in your frontend application:
+
+```bash
+npm install @sonarly/tracker
+```
+
+## Initialize
+
+Add the tracker to your app entry point:
+
+```javascript
+import Tracker from '@sonarly/tracker';
+
+Tracker.init({
+  projectKey: 'YOUR_PROJECT_KEY',
+  ingestPoint: 'https://sonarly.dev/ingest',
+});
+```
+
+## Configuration options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `projectKey` | string | Your project key from the dashboard |
+| `ingestPoint` | string | Ingestion endpoint (use `https://sonarly.dev/ingest`) |
+| `__debug__` | number | Debug level (0-5, use 5 for verbose logging) |
+
+## Verify installation
+
+Check your browser console for Sonarly initialization messages. Sessions should appear in your dashboard within seconds.

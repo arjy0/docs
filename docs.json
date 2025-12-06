@@ -13,8 +13,20 @@
       {
         "group": "Overview",
         "pages": [
-          "quickstart",
-          "tracker",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Tracker",
+        "pages": [
+          "frontend",
+          "source-maps",
+          "backend-tracing"
+        ]
+      },
+      {
+        "group": "Troubleshooting",
+        "pages": [
           "troubleshooting"
         ]
       },
