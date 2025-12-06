@@ -1,6 +1,6 @@
 ---
 title: "Issue replay"
-description: "Replay user sessions to see exactly what happened"
+description: "Replay user sessions to understand bugs"
 ---
 
 When a bug is detected, you can replay the exact session where it happened.
@@ -17,18 +17,79 @@ When a bug is detected, you can replay the exact session where it happened.
 
 Errors are marked on the timeline so you can jump directly to the moment the bug occurred.
 
-## Privacy
+<Frame>
+  <img src="/images/replay-timeline.png" alt="Replay timeline with error markers" />
+</Frame>
 
-You can configure what data is captured in your Sonarly dashboard. By default:
-- Sensitive form inputs are masked
-- Personal data is redacted
-- You control what network requests are recorded
+## How to use
 
-<Card
-  title="View replays"
-  icon="play"
-  href="https://sonarly.dev"
-  horizontal
->
-  Open your Sonarly dashboard
-</Card>
+1. Open an issue from your dashboard or email alert
+2. Click **"View replay"** button
+3. Watch the session unfold
+4. Jump to errors using timeline markers
+5. Inspect console logs and network activity
+
+## Privacy controls
+
+Sonarly respects user privacy with built-in controls:
+
+- **Input masking**: Passwords and sensitive fields are automatically masked
+- **Text redaction**: Optionally redact all text content
+- **Network filtering**: Exclude sensitive API endpoints
+- **IP anonymization**: User IPs are hashed by default
+
+Configure privacy settings in your project dashboard.
+
+## Performance
+
+Session replays are optimized for fast playback:
+
+- **Compressed storage**: Efficient encoding reduces file size by 90%
+- **Lazy loading**: Only loads data as you watch
+- **Skip inactivity**: Automatically skips idle periods
+
+## Linking frontend and backend
+
+To see backend traces in your replays, ensure your backend sends the session ID:
+
+### Node.js example
+
+```javascript
+app.use((req, res, next) => {
+  const sessionId = req.headers['x-sonarly-session-id'];
+  if (sessionId) {
+    Sentry.setTag('sonarly.session_id', sessionId);
+  }
+  next();
+});
+```
+
+### Python example
+
+```python
+@app.middleware("http")
+async def link_session(request, call_next):
+    session_id = request.headers.get("x-sonarly-session-id")
+    if session_id:
+        sentry_sdk.set_tag("sonarly.session_id", session_id)
+    return await call_next(request)
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Backend tracing"
+    icon="server"
+    href="/backend-tracing"
+  >
+    Learn how to link backend errors to sessions
+  </Card>
+  <Card
+    title="LLM-ready context"
+    icon="robot"
+    href="/llm-context"
+  >
+    Copy bug context to fix with AI coding agents
+  </Card>
+</CardGroup>
