@@ -10,9 +10,14 @@
   "favicon": "/favicon.svg",
   "navigation": {
     "pages": [
-      "quickstart",
       {
         "group": "Setup",
+        "pages": [
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Tracker",
         "pages": [
           "installation",
           "sourcemaps",
