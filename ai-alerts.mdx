@@ -1,0 +1,71 @@
+---
+title: "AI-powered alerts"
+description: "Get intelligent alerts for critical issues"
+---
+
+Sonarly doesn't just collect errors — it **understands** them.
+
+## How it works
+
+1. **Detection**: Captures errors from frontend (JS exceptions, console.error) and backend (Sentry traces)
+2. **Clustering**: Groups similar errors together using AI
+3. **Prioritization**: Identifies critical issues based on frequency, user impact, and severity
+4. **Alerting**: Sends email alerts with full context:
+   - Error message
+   - File and line number
+   - Function name
+   - Occurrence count
+   - User sessions affected
+
+## Example alert
+
+```
+🚨 New critical issue detected in yourwebsite.com
+
+A user is blocked after the login                    [Critical]
+
+This AuthenticationError occurred 3 times in the last 2 minutes 
+in auth.service.ts at line 145 (validateUser function).
+```
+
+## Why AI clustering matters
+
+Without clustering, you'd get flooded with alerts for the same issue. Sonarly's AI groups similar errors together so you only get notified once per unique problem.
+
+### Traditional error tracking
+- ❌ 100 alerts for the same bug
+- ❌ No context about user impact
+- ❌ Manual triage required
+
+### Sonarly AI alerts
+- ✅ 1 alert per unique issue
+- ✅ Automatic severity detection
+- ✅ Full context included
+
+## Alert configuration
+
+Configure your alert preferences in the Sonarly dashboard:
+
+- **Severity threshold**: Only alert on critical/high issues
+- **Frequency**: Immediate, hourly digest, or daily digest
+- **Channels**: Email, Slack (coming soon)
+- **Team notifications**: Route alerts to specific team members
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Issue replay"
+    icon="play"
+    href="/issue-replay"
+  >
+    See how to replay sessions where bugs occurred
+  </Card>
+  <Card
+    title="LLM-ready context"
+    icon="robot"
+    href="/llm-context"
+  >
+    Learn how to fix bugs with AI coding agents
+  </Card>
+</CardGroup>
