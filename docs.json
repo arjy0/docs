@@ -9,6 +9,18 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
+    "anchors": [
+      {
+        "anchor": "Community",
+        "icon": "discord",
+        "href": "https://discord.gg/9XDVzde4G4"
+      },
+      {
+        "anchor": "Announcements",
+        "icon": "x-twitter",
+        "href": "https://x.com/SonarlyDev"
+      }
+    ],
     "pages": [
       {
         "group": "Overview",
