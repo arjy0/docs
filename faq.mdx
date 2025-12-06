@@ -3,66 +3,58 @@ title: "FAQ"
 description: "Common questions and troubleshooting"
 ---
 
-## Getting started
+## Common questions
 
 <AccordionGroup>
-  <Accordion title="How long does setup take?">
-    Most teams complete onboarding in under 5 minutes. You'll connect your stack, install our monitoring agent, and run your first test.
+  <Accordion title="How does Sonarly integrate with my workflow?">
+    Sonarly connects to your GitHub or GitLab repositories and automatically reviews pull requests. You'll see feedback directly in your PR comments.
   </Accordion>
-  
-  <Accordion title="Do I need to write tests?">
-    No! Sonarly automatically generates and runs tests for your application. You just need to connect your stack.
+
+  <Accordion title="What languages does Sonarly support?">
+    Sonarly supports all major programming languages including JavaScript, TypeScript, Python, Java, Go, Ruby, and more.
   </Accordion>
-  
-  <Accordion title="What happens when an issue is detected?">
-    You'll receive an alert through your configured notification channel (email, Slack, etc.) with details about what broke and when.
+
+  <Accordion title="How much does Sonarly cost?">
+    We offer flexible pricing based on your team size. Visit our [pricing page](https://sonarly.com/pricing) for details or contact us for enterprise plans.
+  </Accordion>
+
+  <Accordion title="Is my code secure?">
+    Yes. We take security seriously. Your code is encrypted in transit and at rest, and we never store your source code permanently. Read our [security policy](https://sonarly.com/security) for more details.
+  </Accordion>
+
+  <Accordion title="Can I customize the review rules?">
+    Absolutely! You can configure review rules, severity levels, and which checks to run through your Sonarly dashboard.
   </Accordion>
 </AccordionGroup>
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="My monitoring agent won't connect">
+  <Accordion title="Sonarly isn't commenting on my PRs">
     Check that:
-    - Your API key is correct
-    - Your firewall allows outbound connections to Sonarly
-    - The agent has proper permissions in your environment
+    - The Sonarly app is installed on your repository
+    - Your repository has the correct permissions enabled
+    - Your subscription is active
     
-    Still stuck? Contact us at support@sonarly.com
+    If issues persist, contact support.
   </Accordion>
-  
-  <Accordion title="I'm not receiving alerts">
-    Verify your notification settings in your dashboard. Make sure:
-    - Your email/Slack is properly configured
-    - Alerts aren't being filtered by your email provider
-    - You've enabled notifications for the right severity levels
+
+  <Accordion title="How do I disable Sonarly for a specific PR?">
+    Add `[skip sonarly]` to your PR title or description to skip automated reviews for that PR.
   </Accordion>
-  
-  <Accordion title="Can I customize what gets monitored?">
-    Yes! After onboarding, you can configure which endpoints, functions, or components to monitor in your dashboard settings.
+
+  <Accordion title="Reviews are taking too long">
+    Large PRs may take longer to review. For faster reviews, consider breaking up large changes into smaller PRs. If you're experiencing unusual delays, contact support.
   </Accordion>
 </AccordionGroup>
 
-## Billing and plans
-
-<AccordionGroup>
-  <Accordion title="Is there a free trial?">
-    Yes! All new accounts get a 14-day free trial with full access to all features.
-  </Accordion>
-  
-  <Accordion title="How does pricing work?">
-    Pricing is based on the number of applications you monitor and test frequency. See our [pricing page](https://sonarly.com/pricing) for details.
-  </Accordion>
-</AccordionGroup>
-
-## Still need help?
-
-Can't find what you're looking for? We're here to help.
+## Need more help?
 
 <Card
   title="Contact support"
-  icon="envelope"
+  icon="headset"
   href="mailto:support@sonarly.com"
+  horizontal
 >
-  Email us at support@sonarly.com and we'll get back to you within 24 hours
+  Reach out to our team at support@sonarly.com
 </Card>
