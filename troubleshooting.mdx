@@ -9,23 +9,18 @@ description: "Common questions and troubleshooting"
   <Accordion title="What is Sonarly?">
     Sonarly is an AI-first debugging platform that captures user sessions, detects bugs automatically, and generates LLM-ready context to fix them with your coding agent (Cursor, Claude, Windsurf, etc.).
   </Accordion>
-
   <Accordion title="How does the one-click configuration work?">
     Copy the config prompt from your Sonarly dashboard and paste it into your coding agent (Cursor, Claude, Windsurf). Your agent will automatically install the tracker, configure sourcemaps, and set up backend tracing.
   </Accordion>
-
   <Accordion title="What frameworks does Sonarly support?">
     Frontend: React, Vue, Svelte, Angular, and vanilla JS. Backend: Express, NestJS, Fastify, Django, FastAPI, Flask. See the [supported stacks](/supported-stacks) page for details.
   </Accordion>
-
   <Accordion title="How do AI-powered alerts work?">
     Sonarly detects errors from frontend and backend, clusters similar issues using AI, and sends email alerts only for critical issues with full context (file, line, function, occurrence count).
   </Accordion>
-
   <Accordion title="What is LLM-ready context?">
     When a bug is detected, you can copy the full context (error, location, network requests, console logs, backend traces) and paste it directly into your coding agent to fix the bug.
   </Accordion>
-
   <Accordion title="Is my data secure?">
     Yes. Your data is encrypted in transit and at rest. You control what data is captured (sensitive inputs are masked by default). We never share your data with third parties.
   </Accordion>
@@ -36,22 +31,24 @@ description: "Common questions and troubleshooting"
 <AccordionGroup>
   <Accordion title="Tracker not connecting">
     Check that:
+
     - Your `projectKey` is correct
     - `ingestPoint` is set to `https://sonarly.dev/ingest`
     - Enable debug mode: `__debug__: 5`
-    
-    If issues persist, contact us at founders@sonarly.dev
-  </Accordion>
+    - You see the --- SONARLY TAG --- in your console
 
+    If issues persist, contact us at [founders@sonarly.dev](mailto:founders@sonarly.dev)
+  </Accordion>
   <Accordion title="Sourcemaps not working">
     Verify that:
+
     - `.map` files are generated in your build
     - Upload command succeeded (no 404 errors)
     - Sourcemap paths match production URLs
   </Accordion>
-
   <Accordion title="Backend traces not appearing">
     Check that:
+
     - DSN format is correct: `https://KEY@sonarly.dev/ID`
     - `tracesSampleRate` is set to `1.0`
     - Backend was restarted after configuration
@@ -61,11 +58,6 @@ description: "Common questions and troubleshooting"
 
 ## Need more help?
 
-<Card
-  title="Contact support"
-  icon="headset"
-  href="mailto:founders@sonarly.dev"
-  horizontal
->
-  Reach out to our team at founders@sonarly.dev
+<Card title="Contact support" icon="headset" horizontal href="mailto:founders@sonarly.dev">
+  Reach out to our team at [founders@sonarly.dev](mailto:founders@sonarly.dev)
 </Card>
