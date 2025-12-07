@@ -13,14 +13,6 @@ When a bug is detected, you can replay the exact session where it happened.
 - **Network requests**: All fetch/XHR with request/response bodies
 - **Backend traces**: Linked server-side logs and errors
 
-## Timeline
-
-Errors are marked on the timeline so you can jump directly to the moment the bug occurred.
-
-<Frame>
-  <img src="/images/replay-timeline.png" alt="Replay timeline with error markers" />
-</Frame>
-
 ## How to use
 
 1. Open an issue from your dashboard or email alert
@@ -38,8 +30,6 @@ Sonarly respects user privacy with built-in controls:
 - **Network filtering**: Exclude sensitive API endpoints
 - **IP anonymization**: User IPs are hashed by default
 
-Configure privacy settings in your project dashboard.
-
 ## Performance
 
 Session replays are optimized for fast playback:
@@ -50,30 +40,7 @@ Session replays are optimized for fast playback:
 
 ## Linking frontend and backend
 
-To see backend traces in your replays, ensure your backend sends the session ID:
-
-### Node.js example
-
-```javascript
-app.use((req, res, next) => {
-  const sessionId = req.headers['x-sonarly-session-id'];
-  if (sessionId) {
-    Sentry.setTag('sonarly.session_id', sessionId);
-  }
-  next();
-});
-```
-
-### Python example
-
-```python
-@app.middleware("http")
-async def link_session(request, call_next):
-    session_id = request.headers.get("x-sonarly-session-id")
-    if session_id:
-        sentry_sdk.set_tag("sonarly.session_id", session_id)
-    return await call_next(request)
-```
+Backend traces are automatically linked to frontend sessions when you follow the [onboarding setup](/quickstart). No additional configuration required.
 
 ## Next steps
 

@@ -3,42 +3,35 @@
   "theme": "mint",
   "name": "Sonarly",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#00EEC6",
+    "light": "#00E8C1",
+    "dark": "#00C9A7"
   },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "anchors": [
-      {
-        "anchor": "Community",
-        "icon": "discord",
-        "href": "https://discord.gg/9XDVzde4G4"
-      },
-      {
-        "anchor": "Announcements",
-        "icon": "x-twitter",
-        "href": "https://x.com/SonarlyDev"
-      }
-    ],
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo/dark.png",
+    "dark": "/logo/light.png"
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/quickstart"
+    }
+  ],
+    "navigation": {
     "pages": [
       {
         "group": "Overview",
         "pages": [
-          "quickstart"
-        ]
-      },
-      {
-        "group": "Tracker",
-        "pages": [
-          "frontend",
-          "source-maps",
-          "backend-tracing"
-        ]
-      },
-      {
-        "group": "Troubleshooting",
-        "pages": [
+          "quickstart",
+          {
+            "group": "Tracker",
+            "pages": [
+              "frontend",
+              "source-maps",
+              "backend-tracing"
+            ]
+          },
           "troubleshooting"
         ]
       },
@@ -49,13 +42,8 @@
           "issue-replay",
           "llm-context"
         ]
-      },
-      "supported-stacks"
+      }
     ]
-  },
-  "logo": {
-    "light": "/logo/dark.png",
-    "dark": "/logo/light.png"
   },
   "navbar": {
     "links": [
@@ -66,25 +54,27 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Start fixing production bugs",
+      "label": "Start fixing bugs",
       "href": "https://sonarly.dev"
     }
   },
-  "contextual": {
+    "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/alex78420/sonarly-tracker"
+      "github": "https://github.com/alex78420/sonarly-tracker",
+      "x": "https://x.com/SonarlyDev",
+      "discord": "https://discord.gg/9XDVzde4G4"
     }
   }
 }

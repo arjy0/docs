@@ -1,54 +1,226 @@
 ---
-title: "Backend tracing"
-description: "Set up backend tracing to link with frontend sessions"
+title: "3) Backend Traces"
+description: "Set up backend tracing to link errors with frontend sessions"
 ---
 
-## Install SDK
+Backend tracing allows Sonarly to link backend errors and traces with frontend sessions, giving you full visibility into issues across your stack.
 
-Install the Sonarly SDK for your backend:
+## Step 1: Install the Sentry SDK
 
-```bash
-npm install @sonarly/node
+<Tabs>
+  <Tab title="Node.js">
+    ```bash
+    npm install @sentry/node
+    ```
+  </Tab>
+  <Tab title="NestJS">
+    ```bash
+    npm install @sentry/nestjs @sentry/node
+    ```
+  </Tab>
+  <Tab title="Django">
+    ```bash
+    pip install sentry-sdk
+    ```
+  </Tab>
+  <Tab title="FastAPI">
+    ```bash
+    pip install sentry-sdk[fastapi]
+    ```
+  </Tab>
+  <Tab title="Flask">
+    ```bash
+    pip install sentry-sdk[flask]
+    ```
+  </Tab>
+</Tabs>
+
+## Step 2: Initialize Sentry
+
+Add this at the **very top** of your entry file, before any other imports:
+
+<Tabs>
+  <Tab title="Express/Fastify/Koa">
+    ```javascript
+    const Sentry = require("@sentry/node");
+
+    Sentry.init({
+      dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID",
+      tracesSampleRate: 1.0,
+      environment: process.env.NODE_ENV || "development",
+    });
+
+    // Session linking middleware (add before routes)
+    app.use((req, res, next) => {
+      const sessionId = req.headers['x-sonarly-session-id'];
+      if (sessionId) Sentry.setTag('sonarly.session_id', sessionId);
+      next();
+    });
+    ```
+  </Tab>
+  <Tab title="NestJS">
+    ```typescript
+    // instrument.ts - Create this file
+    import * as Sentry from "@sentry/nestjs";
+
+    Sentry.init({
+      dsn: "https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID",
+      tracesSampleRate: 1.0,
+      environment: process.env.NODE_ENV || "development",
+    });
+    ```
+
+    Then import it at the top of your `main.ts`:
+    ```typescript
+    import './instrument';
+    // ... rest of imports
+    ```
+  </Tab>
+  <Tab title="Django">
+    Add to **both** `asgi.py` and `wsgi.py`:
+    ```python
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn="https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID",
+        traces_sample_rate=1.0,
+        environment="production",
+        integrations=[
+            DjangoIntegration(
+                transaction_style="url",
+                middleware_spans=True,
+                signals_spans=True,
+            ),
+        ],
+        send_default_pii=True,
+    )
+    ```
+
+    Create `middleware.py` for session linking:
+    ```python
+    import sentry_sdk
+
+    class SonarlySessionMiddleware:
+        def __init__(self, get_response):
+            self.get_response = get_response
+
+        def __call__(self, request):
+            session_id = request.headers.get('x-sonarly-session-id')
+            if session_id:
+                sentry_sdk.set_tag('sonarly.session_id', session_id)
+            return self.get_response(request)
+    ```
+
+    In `settings.py`, add to MIDDLEWARE and CORS:
+    ```python
+    MIDDLEWARE = [
+        # ... existing middleware ...
+        'your_app.middleware.SonarlySessionMiddleware',
+    ]
+
+    CORS_ALLOW_HEADERS = [
+        # ... existing headers ...
+        'x-sonarly-session-id',
+    ]
+    ```
+  </Tab>
+  <Tab title="FastAPI">
+    ```python
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn="https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID",
+        traces_sample_rate=1.0,
+        environment="production",
+    )
+
+    # Session linking middleware
+    @app.middleware("http")
+    async def link_sonarly_session(request, call_next):
+        session_id = request.headers.get("x-sonarly-session-id")
+        if session_id:
+            sentry_sdk.set_tag("sonarly.session_id", session_id)
+        return await call_next(request)
+    ```
+  </Tab>
+  <Tab title="Flask">
+    ```python
+    import sentry_sdk
+    from flask import request
+
+    sentry_sdk.init(
+        dsn="https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID",
+        traces_sample_rate=1.0,
+        environment="production",
+    )
+
+    # Session linking middleware
+    @app.before_request
+    def link_sonarly_session():
+        session_id = request.headers.get("x-sonarly-session-id")
+        if session_id:
+            sentry_sdk.set_tag("sonarly.session_id", session_id)
+    ```
+  </Tab>
+</Tabs>
+
+## Step 3: Enable CORS for Session Header
+
+Make sure your backend allows the `x-sonarly-session-id` header:
+
+<Tabs>
+  <Tab title="Express">
+    ```javascript
+    const cors = require('cors');
+
+    app.use(cors({
+      exposedHeaders: ['x-sonarly-session-id'],
+      allowedHeaders: ['x-sonarly-session-id']
+    }));
+    ```
+  </Tab>
+  <Tab title="FastAPI">
+    ```python
+    from fastapi.middleware.cors import CORSMiddleware
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_headers=["x-sonarly-session-id"],
+        expose_headers=["x-sonarly-session-id"],
+    )
+    ```
+  </Tab>
+  <Tab title="Django">
+    ```python
+    # settings.py
+    CORS_ALLOW_HEADERS = [
+        'x-sonarly-session-id',
+        # ... other headers
+    ]
+    ```
+  </Tab>
+</Tabs>
+
+## DSN Format
+
+Your DSN can be found in the Sonarly dashboard. It follows this format:
+
 ```
-
-## Initialize
-
-Add Sonarly to your backend entry point:
-
-### Express
-```javascript
-const Sonarly = require('@sonarly/node');
-
-Sonarly.init({
-  dsn: 'https://YOUR_KEY@sonarly.dev/YOUR_PROJECT_ID',
-  tracesSampleRate: 1.0,
-});
-
-app.use(Sonarly.Handlers.requestHandler());
-app.use(Sonarly.Handlers.errorHandler());
-```
-
-### NestJS
-```typescript
-import * as Sonarly from '@sonarly/node';
-
-Sonarly.init({
-  dsn: 'https://YOUR_KEY@sonarly.dev/YOUR_PROJECT_ID',
-  tracesSampleRate: 1.0,
-});
-```
-
-## Link frontend sessions
-
-Enable CORS for the session header:
-
-```javascript
-app.use(cors({
-  exposedHeaders: ['x-sonarly-session-id'],
-  allowedHeaders: ['x-sonarly-session-id']
-}));
+https://YOUR_PROJECT_KEY@sonarly.dev/YOUR_PROJECT_ID
 ```
 
 ## Verify
 
-Backend traces should appear linked to frontend sessions in your dashboard.
+After deploying, check that:
+1. Backend errors appear in your Sonarly dashboard
+2. Errors are linked to frontend sessions (you'll see the session replay)
+3. Traces show the full request flow
+
+<Card
+  title="View AI Alerts"
+  icon="bell"
+  href="/ai-alerts"
+>
+  Get notified about critical issues automatically
+</Card>

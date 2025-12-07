@@ -1,37 +1,111 @@
 ---
-title: "Frontend"
+title: "1) Frontend"
 description: "Install and configure Sonarly tracker in your frontend"
 ---
 
-## Install the tracker
+Choose your preferred installation method. Both methods work with all major frameworks.
 
-Install the Sonarly tracker in your frontend application:
+## NPM Package (Recommended)
+
+For more control and TypeScript support, use the NPM package.
+
+### Installation
 
 ```bash
 npm install @sonarly/tracker
 ```
 
-## Initialize
+### Initialize
 
 Add the tracker to your app entry point:
 
 ```javascript
 import Tracker from '@sonarly/tracker';
 
-Tracker.init({
+const tracker = new Tracker({
   projectKey: 'YOUR_PROJECT_KEY',
-  ingestPoint: 'https://sonarly.dev/ingest',
+  ingestPoint: 'https://sonarly.dev/ingest'
 });
+
+tracker.start();
 ```
 
-## Configuration options
+### Supported Frameworks (NPM)
+
+| Framework | Entry point file |
+|-----------|-----------------|
+| React (Vite) | `src/main.tsx` or `src/index.tsx` |
+| React (CRA) | `src/index.tsx` |
+| Next.js | `pages/_app.tsx` or `app/layout.tsx` |
+| Vue (Vite) | `src/main.ts` |
+| Vue CLI | `src/main.ts` |
+| Nuxt 3 | Plugin in `plugins/` directory |
+| Svelte | `src/main.ts` |
+| SvelteKit | `+layout.svelte` or `hooks.client.ts` |
+| Angular | `src/main.ts` |
+| Remix | `app/entry.client.tsx` |
+
+---
+
+## HTML Script Tag
+
+The simplest way to add Sonarly - just paste this script in your HTML file.
+
+### Installation
+
+Add this script before the closing `</head>` tag in your main HTML file (`index.html`, `app.html`, or layout file):
+
+```html
+<script>
+  (function(A, opts){
+    window.Sonarly = { opts: opts, queue: [] };
+    var s = document.createElement('script');
+    s.src = A;
+    s.async = true;
+    document.head.appendChild(s);
+  })("https://sonarly.dev/static/tracker.js", {
+    projectKey: "YOUR_PROJECT_KEY",
+    ingestPoint: "https://sonarly.dev/ingest"
+  });
+</script>
+```
+
+### Supported Frameworks (HTML)
+
+Works with any framework that has an HTML entry point:
+
+| Framework | Where to add the script |
+|-----------|------------------------|
+| React (Vite) | `index.html` |
+| React (CRA) | `public/index.html` |
+| Next.js | `pages/_document.js` or `app/layout.tsx` |
+| Vue (Vite) | `index.html` |
+| Vue CLI | `public/index.html` |
+| Nuxt 3 | `app.vue` or `nuxt.config.ts` (via head) |
+| Svelte | `app.html` |
+| SvelteKit | `src/app.html` |
+| Angular | `src/index.html` |
+| Remix | `app/root.tsx` |
+| Vanilla JS | Your HTML file |
+
+---
+
+## Configuration Options
 
 | Option | Type | Description |
 |--------|------|-------------|
 | `projectKey` | string | Your project key from the dashboard |
-| `ingestPoint` | string | Ingestion endpoint (use `https://sonarly.dev/ingest`) |
+| `ingestPoint` | string | Ingestion endpoint (`https://sonarly.dev/ingest`) |
 | `__debug__` | number | Debug level (0-5, use 5 for verbose logging) |
 
-## Verify installation
+## Verify Installation
 
-Check your browser console for Sonarly initialization messages. Sessions should appear in your dashboard within seconds.
+Check your browser console for Sonarly initialization messages. Sessions should appear in your dashboard within seconds. At the end of the onboarding, Sonarly provides a detector that verifies each part of the tracker (frontend, sourcemaps, backend traces) is working correctly.
+
+<Card
+  title="Configure sourcemaps"
+  icon="map"
+  href="/source-maps"
+>
+  Enable readable stack traces with sourcemap upload
+</Card>
