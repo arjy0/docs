@@ -51,8 +51,80 @@ description: "Common questions and troubleshooting"
     - DSN format is correct: `https://KEY@sonarly.dev/ID`
     - `tracesSampleRate` is set to `1.0`
     - Backend was restarted after configuration
-    - CORS allows `x-sonarly-session-id` header
+    - CORS allows `x-sonarly-session-id` header (see CORS section below)
   </Accordion>
+
+  <Accordion title="CORS errors with Sonarly tracker">
+    The Sonarly tracker adds an `x-sonarly-session-id` header to your API requests. This custom header triggers CORS preflight requests.
+
+    **Your backend must allow this header:**
+
+    ```javascript
+    // Express.js
+    const cors = require('cors');
+
+    app.use(cors({
+      origin: ['https://yourdomain.com', 'https://www.yourdomain.com'],
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'x-sonarly-session-id',  // Required for Sonarly
+      ],
+    }));
+    ```
+
+    **Common mistakes:**
+    - Missing `origin` in CORS config (causes `Access-Control-Allow-Origin` to be missing)
+    - Different origins: `example.com` ≠ `www.example.com` - add both!
+    - Forgetting to redeploy after CORS changes
+    - Browser caching old CORS responses (try incognito or hard refresh)
+  </Accordion>
+
+  <Accordion title="Build fails with Out of Memory (OOM) on Vercel">
+    Large projects with sourcemaps can exceed Vercel's 8GB memory limit.
+
+    **Solutions (in order of effectiveness):**
+
+    1. **Exclude source content from sourcemaps** (saves ~1GB):
+    ```typescript
+    // vite.config.ts
+    build: {
+      sourcemap: 'hidden',
+      rollupOptions: {
+        output: {
+          sourcemapExcludeSources: true,
+        }
+      }
+    }
+    ```
+
+    2. **Split heavy dependencies** (reduces peak memory):
+    ```typescript
+    manualChunks: (id) => {
+      if (id.includes('node_modules')) {
+        if (id.includes('firebase')) return 'firebase';
+        if (id.includes('pdfjs-dist')) return 'pdf';
+        // Add other heavy packages
+      }
+    }
+    ```
+
+    3. **Use esbuild** (default in Vite) - don't use `minify: 'terser'` which uses more memory
+
+    4. **Increase Node memory**:
+    ```bash
+    NODE_OPTIONS='--max-old-space-size=8192' npm run build
+    ```
+
+    5. **Build locally and deploy pre-built** - use GitHub Actions (14GB) instead of Vercel's build
+
+    <Note>
+    Never split React core packages (`react`, `react-dom`, `scheduler`) into separate chunks - this causes runtime errors.
+    </Note>
+  </Accordion>
+
 </AccordionGroup>
 
 ## Need more help?

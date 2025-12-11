@@ -14,7 +14,7 @@ Add the sourcemap configuration to your build tool:
     ```javascript
     // vite.config.ts
     export default defineConfig({
-      build: { sourcemap: true }
+      build: { sourcemap: 'hidden' }
     })
     ```
   </Tab>
@@ -55,7 +55,7 @@ Add the sourcemap configuration to your build tool:
     ```javascript
     // svelte.config.js
     const config = {
-      kit: { vite: { build: { sourcemap: true } } }
+      kit: { vite: { build: { sourcemap: 'hidden' } } }
     }
     ```
   </Tab>
