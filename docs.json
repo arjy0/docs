@@ -19,32 +19,23 @@
     }
   ],
     "navigation": {
-    "pages": [
-      {
-        "group": "Overview",
-        "pages": [
-          "quickstart",
-          {
-            "group": "Tracker",
-            "pages": [
-              "frontend",
-              "source-maps",
-              "backend-tracing"
-            ]
-          },
-          "troubleshooting"
-        ]
-      },
-      {
-        "group": "Features",
-        "pages": [
-          "ai-alerts",
-          "issue-replay",
-          "llm-context"
-        ]
-      }
-    ]
-  },
+      "groups": [
+        {
+          "group": "Overview",
+          "pages": [
+            "quickstart"
+          ]
+        },
+        {
+          "group": "Features",
+          "pages": [
+            "ai-alerts",
+            "issue-replay",
+            "llm-context"
+          ]
+        }
+      ]
+    },
   "navbar": {
     "links": [
       {
