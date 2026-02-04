@@ -25,14 +25,6 @@
           "pages": [
             "quickstart"
           ]
-        },
-        {
-          "group": "Features",
-          "pages": [
-            "ai-alerts",
-            "issue-replay",
-            "llm-context"
-          ]
         }
       ]
     },
